@@ -1,3 +1,9 @@
+'''
+    Purpose:
+        Create a list of all permutations of digits and lowercase letters.
+        Helpful for subdomain enumeration and cloud bucket discovery.
+'''
+
 import string
 import sys
 from itertools import permutations
