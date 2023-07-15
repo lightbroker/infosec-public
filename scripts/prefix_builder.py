@@ -2,6 +2,12 @@
     Purpose:
         Create a list of all permutations of digits and lowercase letters.
         Helpful for subdomain enumeration and cloud bucket discovery.
+
+    Usage:
+        $ python ./prefix_builder.py 3
+        
+        Numeric argument specifies the length 
+        of each permutation in the list. 
 '''
 
 import string
