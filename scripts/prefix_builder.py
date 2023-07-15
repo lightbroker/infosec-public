@@ -1,4 +1,6 @@
 '''
+    Author: Adam Wilson https://github.com/lightbroker
+
     Purpose:
         Create a list of all permutations of digits and lowercase letters.
         Helpful for subdomain enumeration and cloud bucket discovery.
