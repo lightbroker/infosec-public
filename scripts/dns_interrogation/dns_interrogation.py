@@ -1,7 +1,7 @@
 '''
     DNS Interrogation Tool
     Author: Adam Wilson, https://github.com/lightbroker
-
+    
     *** run as sudo
 
     Usage:
@@ -15,13 +15,20 @@
 '''
 
 import argparse
+import calendar
+import json
 import subprocess
+import time
 import tldextract
+
+from ip_address_extraction import IpAddressExtraction
 
 
 class DnsInterrogation:
     def __init__(self):
         self.results = {
+            "hostname": None,
+            "tld_plus1": None,
             "authoritative_dns": {
                 "ipv4": [],
                 "ipv6": [],
@@ -32,9 +39,12 @@ class DnsInterrogation:
         try:
             print(f'checking whois for {hostname}')
             
-            # TODO extract domain
+            self.results["hostname"] = hostname
+
+            # extract eTLD+1
             extract_result = tldextract.extract(hostname)
             tld_plus1 = f'{extract_result.domain}.{extract_result.suffix}'
+            self.results["tld_plus1"] = tld_plus1
             print(f'using domain: \"{tld_plus1}\" from hostname: \"{hostname}\"')
 
             # Run the whois command to get Name Server hostnames
@@ -49,7 +59,8 @@ class DnsInterrogation:
                 if "Name Server:" in line:
                     name_server = line.split(":")[1].strip()
                     print(f'discovered name server: {name_server}')
-                    name_servers.append(name_server)
+                    if name_server not in name_servers:
+                        name_servers.append(name_server)
 
             # Run the host command on each Name Server
             for ns in name_servers:
@@ -58,17 +69,25 @@ class DnsInterrogation:
                 # Extract and parse IP addresses
                 for line in host_output.splitlines():
                     print(f'attempting to extract IP address from line: \"{line}\"')
-                    if "has IPv4 address" in line:
-                        ipv4_address = line.split()[-1]
+
+                    ipv4_address = IpAddressExtraction(line).get_ipv4_address()
+                    if ipv4_address is not None:
                         if ipv4_address not in ipv4_list:
                             ipv4_list.append(ipv4_address)
-                    elif "has IPv6 address" in line:
-                        ipv6_address = line.split()[-1]
+
+                    ipv6_address = IpAddressExtraction(line).get_ipv6_address()
+                    if ipv6_address is not None:
                         if ipv6_address not in ipv6_list:
                             ipv6_list.append(ipv6_address)
 
             print("Authoritative DNS results:")
             print(self.results)
+
+            timestamp = calendar.timegm(time.gmtime())
+            results_filename = f'dns_interrogation.{hostname}.{timestamp}.json'
+            with open(results_filename,'w') as f:
+                results_json = json.dumps(self.results, indent = 4)
+                f.write(results_json)
 
             # Nmap NSE dns-brute
             nmap_cmd = [
