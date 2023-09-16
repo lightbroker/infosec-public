@@ -49,7 +49,7 @@ class DnsInterrogation:
                 if "Name Server:" in line:
                     name_server = line.split(":")[1].strip()
                     print(f'discovered name server: {name_server}')
-                    name_servers.append()
+                    name_servers.append(name_server)
 
             # Run the host command on each Name Server
             for ns in name_servers:
