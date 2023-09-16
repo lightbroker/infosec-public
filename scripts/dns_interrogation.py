@@ -38,7 +38,7 @@ class DnsInterrogation:
             print(f'using domain: \"{tld_plus1}\" from hostname: \"{hostname}\"')
 
             # Run the whois command to get Name Server hostnames
-            whois_output = subprocess.check_output(["whois", hostname], universal_newlines=True)
+            whois_output = subprocess.check_output(["whois", tld_plus1], universal_newlines=True)
             authoritative_dns = self.results["authoritative_dns"]
             ipv4_list = authoritative_dns["ipv4"]
             ipv6_list = authoritative_dns["ipv6"]
