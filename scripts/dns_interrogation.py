@@ -1,7 +1,7 @@
 '''
     DNS Interrogation Tool
     Author: Adam Wilson, https://github.com/lightbroker
-    
+
     *** run as sudo
 
     Usage:
@@ -95,7 +95,7 @@ class DnsInterrogation:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="DNS Interrogation Tool")
     parser.add_argument("-t", dest="target", help="Target hostname to interrogate")
-    parser.add_argument("-h", dest="hostlist", help="A list of hosts for Nmap NSE dns-brute (filename)")
+    parser.add_argument("-l", dest="hostlist", help="A list of hosts for Nmap NSE dns-brute (filename)")
     args = parser.parse_args()
     dns_interrogation = DnsInterrogation()
     dns_interrogation.run(args.target, args.hostlist)
