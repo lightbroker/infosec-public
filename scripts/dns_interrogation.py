@@ -1,6 +1,7 @@
 '''
     DNS Interrogation Tool
-
+    Author: Adam Wilson, https://github.com/lightbroker
+    
     *** run as sudo
 
     Usage:
