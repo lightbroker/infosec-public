@@ -26,3 +26,9 @@ class IpAddressExtraction:
         match = self.ipv6_pattern.search(self.input)
         if match is not None:
             return match[0]
+
+
+    def get_all_ipv4(self):
+        match = re.findall(self.ipv4_pattern, self.input)
+        if match is not None:
+            return match
